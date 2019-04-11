@@ -4,10 +4,8 @@ int main()
 {
    struct parti lavj;
 
-  // pp_info(&lavj);
-  // aff_parti(&lavj);
-  int a;
-  entrerNim(&a);
+     pp_info(&lavj);
+     aff_parti(&lavj);
 
 
    /*FILE* fichier= NULL;

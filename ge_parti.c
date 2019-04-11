@@ -242,7 +242,7 @@ void entrerDate(struct dat *sdate, struct dat *actuel){
             printf("\n \t \t Entrer le jour encore une fois");
             goto sinonjour;
         }
-        if(sdate->mois==2 && sdate->jour >30 && bisex(sdate->annee)==1){
+        if(sdate->mois==2 && sdate->jour >29 && bisex(sdate->annee)==1){
             printf("\n \t \t ERREUR: CE MOIS NE CONTIENT PAS PLUS DE 28 JOURS");
             printf("\n \t \t Entrer le jour encore une fois");
             goto sinonjour;
