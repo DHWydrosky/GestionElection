@@ -5,10 +5,10 @@ int main()
    struct parti lavj;
 
   // pp_info(&lavj);
+  // aff_parti(&lavj);
+  int a;
+  entrerNim(&a);
 
- int a;
- a=lireInt();
- printf("\n %d", a);
 
    /*FILE* fichier= NULL;
 

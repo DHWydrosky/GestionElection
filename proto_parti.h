@@ -56,3 +56,4 @@ struct parti{
     void entrerResp();
     void pp_info();
     void majuscule();
+    void aff_parti();

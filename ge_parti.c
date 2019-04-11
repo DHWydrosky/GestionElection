@@ -342,14 +342,19 @@ void entrerEmail(char *email){
 void entrerNim(int *num){
 
     sinonNim: // ETIQUETTE
-    printf("Telephone: ");
+    printf("\nTelephone: ");
     *num=lireInt();
     //CONDITION POUR VERIFIER SI LE NUMERO EST VALABLE EN HATITI
-    if(! (*num>22000000 && *num<22999999) && (*num>28100000&&*num<28199999) && (*num>25000000&&*num<25999999) && (*num>31000000&&*num<43999999) && (*num>46000000&&*num<48999999) ){
+    if(*num<10000000 || *num>99999999){
+        printf("ERREUR: VOTRE NUREMO DOIT AVOIR 8 CHIFFRES");
+        goto sinonNim;
+    }
+    if(! ((*num>22000000 && *num<22999999) || (*num>28100000&&*num<28199999) || (*num>25000000&&*num<25999999) || (*num>31000000&&*num<43999999) || (*num>46000000&&*num<48999999)) ){
         printf("ERREUR: VOTRE NUREMO DOIT COMMENCER PAR:");
         printf("\n 22 25 entre (31 et 39) entre(40 et 43) entre(46 et 48)");
         goto sinonNim;
     }
+    printf("\n le numero telephone est: +509 %d", *num);
 }
 void pp_info(struct parti *lavalas){
     printf("\n Vous allez entrer les differentes informations a propos de votre parti politique");
@@ -398,10 +403,18 @@ void pp_info(struct parti *lavalas){
     entrerNim(&lavalas->telephone);
     clr();
 
-
-
 }
-
+// CETTE FONCTION PERMET L'AFFICHAGE DES VALEURS
+void aff_parti(struct parti* lavalas){
+   printf("ID                     : %d \n", lavalas->Id_PP);
+   printf("Nom du parti           : %s \n", lavalas->nom);
+   printf("La date de creation est: %d/%d/%d \n", lavalas->date_creat.jour, lavalas->date_creat.mois, lavalas->date_creat.annee);
+   printf("La date de creation est: %d/%d/%d \n", lavalas->date_ins.jour, lavalas->date_ins.mois, lavalas->date_ins.annee);
+   printf("Adresse                : %d, %s, %s \n", lavalas->adresse.rue, lavalas->adresse.nomRue, lavalas->adresse.departement);
+   printf("Responsable            : %s %s \n", lavalas->Responsable.nom, lavalas->Responsable.prenom);
+   printf("Telephone              : +509 %d \n",lavalas->telephone);
+   printf("Email                  : %s \n", lavalas->email);
+}
 // CETTE FONCTION EST DEFINIE POUR POUVOIR DETERMINER SI UNE ANNEE EST BISEXTILE OU PAS
 int bisex(int A){
 
