@@ -275,12 +275,11 @@ void dateDuJour(struct dat *sdate){
 }
 
 void entrerResp(struct Responsables *resp){
-    printf("\nVous allez entrer le nom du Responsable");
 
-    printf("\n \t Nom: ");
+    printf("\n \t Nom du responsable: ");
     lire(resp->nom,2*caracMini);
 
-    printf("\n \t Prenom: ");
+    printf("\n \t Prenom du responsable: ");
     lire(resp->prenom,2*caracMini);
 
     printf("\tle responsable est %s, %s \n", resp->prenom ,resp->nom);
@@ -389,7 +388,7 @@ void pp_info(struct parti *lavalas){
     entrerAdresse(&lavalas->adresse);
     clr();
     // ENTRER LE NOM DU RESPONSABLE
-    printf("\n\t \t \t4-RESPONSABLE DU PARTI--");
+    printf("\n\t \t \t4-NOM DU RESPONSABLE DU PARTI--");
     entrerResp(&lavalas->Responsable);
     clr();
     // RECUPERATION DE L'EMAIL
@@ -406,14 +405,74 @@ void pp_info(struct parti *lavalas){
 }
 // CETTE FONCTION PERMET L'AFFICHAGE DES VALEURS
 void aff_parti(struct parti* lavalas){
-   printf("ID                     : %d \n", lavalas->Id_PP);
-   printf("Nom du parti           : %s \n", lavalas->nom);
-   printf("La date de creation est: %d/%d/%d \n", lavalas->date_creat.jour, lavalas->date_creat.mois, lavalas->date_creat.annee);
-   printf("La date de creation est: %d/%d/%d \n", lavalas->date_ins.jour, lavalas->date_ins.mois, lavalas->date_ins.annee);
-   printf("Adresse                : %d, %s, %s \n", lavalas->adresse.rue, lavalas->adresse.nomRue, lavalas->adresse.departement);
-   printf("Responsable            : %s %s \n", lavalas->Responsable.nom, lavalas->Responsable.prenom);
-   printf("Telephone              : +509 %d \n",lavalas->telephone);
-   printf("Email                  : %s \n", lavalas->email);
+
+   printf("1-Nom du parti              : %s \n", lavalas->nom);
+   printf("2-La date de creation est   : %d/%d/%d \n", lavalas->date_creat.jour, lavalas->date_creat.mois, lavalas->date_creat.annee);
+   printf("3-Adresse                   : %d, %s, %s \n", lavalas->adresse.rue, lavalas->adresse.nomRue, lavalas->adresse.departement);
+   printf("4-Responsable               : %s %s \n", lavalas->Responsable.nom, lavalas->Responsable.prenom);
+   printf("5-Telephone                 : +509 %d \n",lavalas->telephone);
+   printf("6-Email                     : %s \n", lavalas->email);
+
+    printf("\n \t \t \t \t Inscrit le : %d/%d/%d \n", lavalas->date_ins.jour, lavalas->date_ins.mois, lavalas->date_ins.annee);
+    printf("\t \t \t \t ID         : %d \n", lavalas->Id_PP);
+}
+
+// CETTE FONCTION DEMANDE A LUTILISATEUR S'IL NE VEUT PAS MODIFIER LES DONNEES AVANT LENREFISTREMENT
+int modiBefore(struct parti* lavalas){
+    int ok;
+    int choix;
+    clr(); // nettoyer le console
+    aff_parti(lavalas);// affichage des donnees precedemment entrees
+    printf("\n voulez vous modifier les valeurs ci-dessus");
+
+    printf("\n si oui presser 1 \n sinon presser 0:-> ");
+    ok=lireInt();
+
+    while(ok==1){
+        clr();
+        aff_parti(lavalas);
+        printf(" \n \t \t Entrer le # du champ que vous voulez modifier ->");
+        choix=lireInt();
+
+        switch(choix)
+        {
+        case 1:
+                printf("\nEntrer le nouveau nom");
+                printf("\nNom du parti: ");
+                lire(&lavalas->nom,tailleMot);
+            break;
+        case 2:
+                printf("\nEntrer la nouvelle date de creation");
+                printf("\n Date creation ");
+                entrerDate(&lavalas->date_creat,&lavalas->date_ins);
+            break;
+        case 3:
+                printf("\nEntrer la nouvelle adresse");
+                printf("\n adresse");
+                entrerAdresse(&lavalas->adresse);
+            break;
+        case 4:
+                printf("\nEntrer la nouvelle valeur");
+                printf("\n Responsable");
+                entrerResp(&lavalas->Responsable);
+            break;
+        case 5:
+                printf("\nEntrer le nouveau numero");
+                entrerNim(&lavalas->telephone);
+            break;
+        case 6:
+                printf("\nEntrer le nouveau email");
+                entrerEmail(&lavalas->email);
+            break;
+        }
+        clr();
+        aff_parti(lavalas);
+        printf(" \n \t \t Voulez vous faire une autre modification \n si oui presser 1 \n sinon presser 0 :-> ");
+        ok=lireInt();
+    }
+
+
+
 }
 // CETTE FONCTION EST DEFINIE POUR POUVOIR DETERMINER SI UNE ANNEE EST BISEXTILE OU PAS
 int bisex(int A){

@@ -6,7 +6,7 @@ int main()
 
      pp_info(&lavj);
      aff_parti(&lavj);
-
+     modiBefore(&lavj);
 
    /*FILE* fichier= NULL;
 
