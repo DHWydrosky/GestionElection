@@ -2,7 +2,7 @@
 
 
 //fonction pour entrer l`ADRESSE
-int lire(char* chaine,int taille){
+/*int lire(char* chaine,int taille){
      char *pos=NULL;
      int itsok=0;
      char vide[]="";
@@ -24,8 +24,105 @@ int lire(char* chaine,int taille){
          }
      }
     return 1;
+}*/
+
+
+void viderBuffer()   // comme son nom l'indique
+{
+    int c = 0;
+    while (c != '\n' && c != EOF)
+    {
+        c = getchar();
+    }
 }
+
+int lire(char *chaine,int longeuer_chaine)
+{
+
+    char *position_cursor = NULL,*chaine_verificator = NULL;
+    char chaine2[30]= {'\0'};
+    int i,j=0,temoin = 0;
+
+
+
+
+
+    if(fgets(chaine,longeuer_chaine,stdin) != NULL)
+    {
+
+
+        position_cursor = strchr(chaine,'\n');
+        if(position_cursor != NULL)
+        {
+            *position_cursor = '\0';
+        }
+        else
+        {
+            viderBuffer();
+        }
+
+
+
+        for(i=strlen(chaine); i>=0; i--)
+        {
+            if(chaine[i-1] == ' ')
+            {
+                chaine[i-1] = '\0';
+            }
+            else
+                break;
+        }
+
+        i=0;
+        while(chaine[i]==' ')
+            i++;
+
+        for(i=i; i<strlen(chaine); i++)
+        {
+            if((chaine[i]==' ') && (temoin == 0))
+            {
+                chaine2[j] = ' ';
+                temoin = 1;
+                j++;
+            }
+            if(chaine[i]!= ' ')
+            {
+                chaine2[j] = chaine[i];
+                j++;
+                temoin = 0;
+            }
+        }
+
+
+        for(i=0; i<strlen(chaine); i++)
+        {
+            chaine[i] = '\0';
+        }
+        strcpy(chaine,chaine2);
+
+
+
+for(i=0; i<longeuer_chaine; i++)
+        {
+            chaine[i] = toupper(chaine[i]);
+        }
+
+
+
+
+
+        return 1;
+    }
+    else
+    {
+        viderBuffer();
+        return 0;
+    }
+
+}
+
 // CETTE FONCTION PERMET D'ENTRER DES VALEURS NUMERIQUES SOUS FORMES DE CARACTERES ET DE RETOUNER LA CONVERSION EN INT
+/*
 int lireInt(){ // bay yon ti modification sou fonction verifier si chak grenn karakte yo se chif
  char *pos=NULL;
  char chaine[caracMini];
@@ -42,6 +139,41 @@ int lireInt(){ // bay yon ti modification sou fonction verifier si chak grenn ka
         return atoi(chaine);
      }
      else {return -1;}
+}*/
+
+int lireInt()
+{
+    int i= 0;
+    char chaine[caracMini]= {'\0'};
+    char chaine2[]= "0123456789";
+    char *verificator = NULL;
+
+    re_enter:
+
+    if(lire(chaine,caracMini))
+    {
+        while(i<caracMini)
+        {
+            verificator = strchr(chaine2,chaine[i]) ;
+            if(verificator == NULL){
+                printf("\n \t VOTRE ENTREE N'A PAS ETE VALIDE ____ ENTRER ENCORE ");
+                printf("\n Entrer le nombre correspondant ici: ");
+                goto re_enter;
+            }
+            else
+                i++;
+        }
+
+
+        return strtol(chaine,NULL,caracMini);
+
+    }
+    else
+    {
+        printf("\n \t VOTRE ENTREE N'A PAS ETE VALIDE");
+        goto re_enter;
+    }
+
 }
 // CETTE FONCTION NOUS PERMET DE RECUPERER LES ADRESSES
 void entrerAdresse(struct Adres *adresse){
@@ -221,32 +353,50 @@ void entrerNim(int *num){
 }
 void pp_info(struct parti *lavalas){
     printf("\n Vous allez entrer les differentes informations a propos de votre parti politique");
+    printf("\n Vous allez les entrer dans l'ordre suivant");
+    printf("\n 1-Nom du parti politique ");
+    printf("\n 2-Date de creation de cet parti");
+    printf("\n 3-Adresse du parti politique");
+    printf("\n 4-Responsable du parti");
+    printf("\n 5-Email");
+    printf("\n 6-Telephone");
 
+    printf("\n \t \t PRESSEZ UN BOUTON POUR CONTINUER");
+    getch();
+
+    clr();
     // GENERER UN ID POUR CHAQUE ENTREE RETENUE
     lavalas->Id_PP=1;
     // RECUPERATION DE LA DATE DU JOUR
     dateDuJour(&lavalas->date_ins);
     // DEMANDER A L'UTILISATEUR D'ENTRER LE NOM DU PARTI
-    printf("\n\t\tNom du parti politique ");
+    printf("\n\t\t--NOM DU PARTI;");
     lire(lavalas->nom,2*tailleMot);
+    clr();
+
 
     // DEMANDER A L'UTILISATEUR D'ENTRER LA DATE DE CREATION DE CE PARTI
-    printf("\n\t\t\t--DATE DE CREATION--");
+    printf("\n\t\t\t2-DATE DE CREATION--");
     entrerDate(&lavalas->date_creat, &lavalas->date_ins);
+    clr();
     // ICI POUR ENTRER L'ADRESSE
-    printf("\n\t\t\t--ADRESSE DU PARTI POLITIQUE--");
+    printf("\n\t\t\t3-ADRESSE DU PARTI POLITIQUE--");
     entrerAdresse(&lavalas->adresse);
+    clr();
     // ENTRER LE NOM DU RESPONSABLE
-    printf("\n\t \t \t--RESPONSABLE DU PARTI DE POLITIQUE--");
+    printf("\n\t \t \t4-RESPONSABLE DU PARTI--");
     entrerResp(&lavalas->Responsable);
+    clr();
     // RECUPERATION DE L'EMAIL
-    printf("\n \t \t \t --EMAIL--");
+    printf("\n \t \t \t5-EMAIL--");
     printf("\n \t Entrer l'email du parti politique: ");
     entrerEmail(&lavalas->email);
+    clr();
      // RECUPERATION DU # TELEPHONE
-    printf("\n \t \t \t --TELEPHONE--");
+    printf("\n \t \t \t 6-TELEPHONE--");
     printf("\n \t Entrer le telephone du parti politique: ");
     entrerNim(&lavalas->telephone);
+    clr();
 
 
 

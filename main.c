@@ -4,9 +4,11 @@ int main()
 {
    struct parti lavj;
 
-   pp_info(&lavj);
+  // pp_info(&lavj);
 
-
+ int a;
+ a=lireInt();
+ printf("\n %d", a);
 
    /*FILE* fichier= NULL;
 

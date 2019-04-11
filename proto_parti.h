@@ -9,6 +9,9 @@
 // L'ENSEMBLE DES 'DEFINE'
 #define tailleMot 50
 #define caracMini 10
+#define clr(); Sleep(2000); system("clear");
+
+
 
 
 
