@@ -9,7 +9,7 @@
 // L'ENSEMBLE DES 'DEFINE'
 #define tailleMot 50
 #define caracMini 10
-#define clr(); Sleep(2000); system("clear");
+#define clr(); printf("\n \t \t Patientez "); Sleep(1500); system("clear");
 
 
 
@@ -57,3 +57,5 @@ struct parti{
     void pp_info();
     void majuscule();
     void aff_parti();
+    void color();
+    void ins_PP();

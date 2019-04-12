@@ -156,8 +156,11 @@ int lireInt()
         {
             verificator = strchr(chaine2,chaine[i]) ;
             if(verificator == NULL){
+                     color(12,0);
                 printf("\n \t VOTRE ENTREE N'A PAS ETE VALIDE ____ ENTRER ENCORE ");
-                printf("\n Entrer le nombre correspondant ici: ");
+                     color(10,0);
+                printf("\n \t Entrer le nombre correspondant ici: ");
+                      color(15,0);
                 goto re_enter;
             }
             else
@@ -165,12 +168,15 @@ int lireInt()
         }
 
 
+
         return strtol(chaine,NULL,caracMini);
 
     }
     else
     {
+           color(10,0);
         printf("\n \t VOTRE ENTREE N'A PAS ETE VALIDE");
+            color(15,0);
         goto re_enter;
     }
 
@@ -187,14 +193,12 @@ void entrerAdresse(struct Adres *adresse){
    lire(adresse->nomRue, tailleMot);
 
    printf("\n \t enter le departement: ");
-   lire(adresse->departement,caracMini);
-   majuscule(adresse->departement);
-    /*char de[]="OUEST";
-   if(strcmp(adresse->departement,de)!=0){
-    printf("lkkk bkksksk");
-   }*/
+  // do{
 
-    printf("\nvous habitez a %d, %s, %s \n", adresse->rue, adresse->nomRue, adresse->departement);
+   lire(adresse->departement,caracMini);
+  // }
+   //while((adresse->departement=="OUEST" || adresse->departement=="SUD" || adresse->departement=="GRAND'ANSE" || adresse->departement=="CENTRE" || adresse->departement=="NORD" || adresse->departement=="NORD-EST" || adresse->departement=="NORD-OUEST"));
+    printf("\nvous habitez a #%d,Rue %s, %s \n", adresse->rue, adresse->nomRue, adresse->departement);
 }
 
 //FONTION NOUS PERMETTANT D'ENTRER LES DATES
@@ -204,17 +208,25 @@ void entrerDate(struct dat *sdate, struct dat *actuel){
         do{
             printf("\n \t Annee: ");
             sdate->annee = lireInt();
-            if(sdate->annee>2019){
-                printf("\n \t ERREUR: L'ANNEE DE CREATION NE PEUT ETRE SUPERIEUR A 2019");
+            if(sdate->annee > actuel->annee){
+                color(12,0);
+                printf("\n \t ERREUR: L'ANNEE DE CREATION NE PEUT ETRE SUPERIEUR A %d", actuel->annee);
+                color(10,0);
+                printf("\n \t \t Entrer l'annee encore une fois");
+                color(15,0);
             }
-        }while(sdate->annee<=1000 || sdate->annee>2019);
+         }while(sdate->annee<=1804 || sdate->annee > actuel->annee);
 
         do{
 
             printf("\n \t Mois: ");
             sdate->mois = lireInt();
             if(sdate->mois>12){
+            color(12,0);
             printf("\n \t ERREUR: IL Y A 12 MOIS DANS UNE ANNEE");
+            color(10,0);
+            printf("\n \t \t Entrer le mois encore une fois");
+            color(15,0);
            }
         }while(sdate->mois<=0 || sdate->mois>12);
 
@@ -223,42 +235,64 @@ void entrerDate(struct dat *sdate, struct dat *actuel){
            sdate->jour = lireInt();
 
         if (sdate->jour<=0){
+                color(12,0);
             printf("\n \t \t ERREUR: ON NE PREND PAS DE VALEUR NEGATIF");
+                color(10,0);
             printf("\n \t \t Entrer le jour encore une fois");
+                color(15,0);
             goto sinonjour;
         }
         if (sdate->jour>31){
+                color(12,0);
             printf("\n \t \t ERREUR: AUCUN MOIS NE CONTIENT PLUS DE 31 JOURS");
+                color(10,0);
             printf("\n \t \t Entrer le jour encore une fois");
+                color(15,0);
             goto sinonjour;
         }
         if (sdate->mois%2==0 && sdate->jour>30 && sdate->mois<8){
+                color(12,0);
             printf("\n \t \t ERREUR: CE MOIS NE CONTIENT PAS PLUS DE 30 JOURS");
+                color(10,0);
             printf("\n \t \t Entrer le jour encore une fois");
+                color(15,0);
             goto sinonjour;
         }
         if (sdate->mois%2==1 && sdate->jour>30 && sdate->mois>8){
+                 color(12,0);
             printf("\n \t \t ERREUR: CE MOIS NE CONTIENT PAS PLUS DE 30 JOURS");
+                 color(10,0);
             printf("\n \t \t Entrer le jour encore une fois");
+                 color(15,0);
             goto sinonjour;
         }
         if(sdate->mois==2 && sdate->jour >29 && bisex(sdate->annee)==1){
-            printf("\n \t \t ERREUR: CE MOIS NE CONTIENT PAS PLUS DE 28 JOURS");
+                 color(12,0);
+            printf("\n \t \t ERREUR: CE MOIS NE CONTIENT PAS PLUS DE 28 JOURS");\
+                  color(10,0);
             printf("\n \t \t Entrer le jour encore une fois");
+                   color(15,0);
             goto sinonjour;
         }
         if(sdate->mois==2 && sdate->jour>28 && bisex(sdate->annee)==0){
+                 color(12,0);
             printf("\n \t \t ERREUR: CE MOIS NE CONTIENT PAS PLUS DE 29 JOURS");
+                  color(10,0);
             printf("\n \t \t Entrer le jour encore une fois");
+                   color(15,0);
             goto sinonjour;
         }
 
       if(sdate->annee == actuel->annee && sdate->mois == actuel->mois && sdate->jour == sdate->jour ){
+             color(12,0);
         printf("ERREUR: LA DATE DE CREATION NE PEUT SE CONFONDRE AVEC LA DATE D'INSCRIPTION");
+             color(15,0);
+             entrerDate(sdate,actuel);
       }
 
-
+            color(4,0);
     printf("\n \t La date de creation est %02d/%02d/%d \n ", sdate->jour, sdate->mois, sdate->annee);
+            color(15,0);
 }
 
 // RECUPERER ET AFFICHER LA DATE DU JOUR
@@ -298,17 +332,23 @@ void entrerEmail(char *email){
     voir = strpbrk(email, "!$&*-^\=`#%'+/?_{}"); // VOIR SI DANS L'EMAIL RECUPERE S'IL N'Y A PAS LES CARACTERES SUIVANTS "!$&*-^\=`#%'+/?_{}"
 
     if(voir!= NULL){
+             color(12,0);
         printf("\n \t \t ERREUR: VOTRE EMAIL NE PEUT CONTENIR LES CARACTERES SUIVANTS");
         printf("\n \t \t !$&*-^\=`#%'+/?_{}");
+             color(10,0);
         printf("\n Entrer l'email encore une fois");
+             color(15,0);
         goto sinonemail;
     } // SI EMAIL RECUPERE CONTIENT LES CARACTERES REPRESENTES CI-DESSUS ON REDEMANDE A L'UTILISATEUR L'EMAIL
      voir=NULL;
      voir = strpbrk(email, "@"); // RECUPERER L'ADRESSE DU CARACTERE @
 
      if(voir==NULL){
+             color(12,0);
         printf("\n \t \t ERREUR: VOUS N'AVEZ PAS INSERER DE NOM D'EXTENSION");
+              color(10,0);
         printf("\n \t Entrer l'email encore une fois");
+                color(15,0);
         goto sinonemail;
      }// VOIR S'IL Y A UN EXTENSION
 
@@ -318,21 +358,30 @@ void entrerEmail(char *email){
         i++;
      }
      if(i<6){
+             color(12,0);
         printf("\n \t \t ERREUR: VOUS DEVEZ AVOIR PLUS DE 6 CARACTERES AVANT L'EXTENSION");
+              color(10,0);
         printf("\n Entrer l'email encore une fois");
+              color(15,0);
         goto sinonemail;
      }
      //VERIFIER SI IL Y A PLUS DE 6 CARACTERE APRES @
      if(strlen(voir)<6){
+             color(12,0);
         printf("\n \t \t ERREUR: VOUS DEVEZ AVOIR PLUS DE 6 CARACTERES APRES L'EXTENSION");
+             color(10,0);
         printf("\n Entrer l'email encore une fois");
+              color(15,0);
         goto sinonemail;
      }
      //RECHERCHE D'UN NOM  DE DOMAINE
      if(strchr(voir, '.')==NULL){
+             color(12,0);
         printf("\n \t \t ERREUR: VOUS DEVEZ AVOIR UN NOM DE DOMAINE");
         printf("\n \t \t ERREUR: TEL QUE .com .fr .org");
+               color(10,0);
         printf("\n Entrer l'email encore une fois");
+                color(15,0);
         goto sinonemail;
      }
 
@@ -345,15 +394,21 @@ void entrerNim(int *num){
     *num=lireInt();
     //CONDITION POUR VERIFIER SI LE NUMERO EST VALABLE EN HATITI
     if(*num<10000000 || *num>99999999){
-        printf("ERREUR: VOTRE NUREMO DOIT AVOIR 8 CHIFFRES");
+             color(12,0);
+        printf("\t \t ERREUR: VOTRE NUREMO DOIT AVOIR 8 CHIFFRES");
+             color(15,0);
         goto sinonNim;
     }
     if(! ((*num>22000000 && *num<22999999) || (*num>28100000&&*num<28199999) || (*num>25000000&&*num<25999999) || (*num>31000000&&*num<43999999) || (*num>46000000&&*num<48999999)) ){
+               color(12,0);
         printf("ERREUR: VOTRE NUREMO DOIT COMMENCER PAR:");
         printf("\n 22 25 entre (31 et 39) entre(40 et 43) entre(46 et 48)");
+               color(15,0);
         goto sinonNim;
     }
+         color(4,0);
     printf("\n le numero telephone est: +509 %d", *num);
+         color(15,0);
 }
 void pp_info(struct parti *lavalas){
     printf("\n Vous allez entrer les differentes informations a propos de votre parti politique");
@@ -365,7 +420,9 @@ void pp_info(struct parti *lavalas){
     printf("\n 5-Email");
     printf("\n 6-Telephone");
 
+     color(10,0);
     printf("\n \t \t PRESSEZ UN BOUTON POUR CONTINUER");
+     color(15,0);
     getch();
 
     clr();
@@ -406,7 +463,7 @@ void pp_info(struct parti *lavalas){
 // CETTE FONCTION PERMET L'AFFICHAGE DES VALEURS
 void aff_parti(struct parti* lavalas){
 
-   printf("1-Nom du parti              : %s \n", lavalas->nom);
+   printf("\n\n1-Nom du parti              : %s \n", lavalas->nom);
    printf("2-La date de creation est   : %d/%d/%d \n", lavalas->date_creat.jour, lavalas->date_creat.mois, lavalas->date_creat.annee);
    printf("3-Adresse                   : %d, %s, %s \n", lavalas->adresse.rue, lavalas->adresse.nomRue, lavalas->adresse.departement);
    printf("4-Responsable               : %s %s \n", lavalas->Responsable.nom, lavalas->Responsable.prenom);
@@ -423,9 +480,11 @@ int modiBefore(struct parti* lavalas){
     int choix;
     clr(); // nettoyer le console
     aff_parti(lavalas);// affichage des donnees precedemment entrees
+     color(10,0);
     printf("\n voulez vous modifier les valeurs ci-dessus");
 
     printf("\n si oui presser 1 \n sinon presser 0:-> ");
+     color(15,0);
     ok=lireInt();
 
     while(ok==1){
@@ -471,9 +530,58 @@ int modiBefore(struct parti* lavalas){
         ok=lireInt();
     }
 
+}
 
+//FONCTION ENREGISTRER PARTI
+void ins_PP(){
+         struct parti lavalas;
+
+        pp_info(&lavalas);
+        aff_parti(&lavalas);
+        modiBefore(&lavalas);
+
+        //ecriture en fichier
+
+       // struct parti* PP = (struct parti*)malloc(sizeof(struct parti));
+
+       FILE* fichier= NULL;
+
+           fichier =fopen("part_pol.dat","a");
+               if(fichier==NULL){
+                    printf("fichier not open");
+                    exit(0);// LA NOU TA SIPOZE METE YON RETOUR NAN REEKRI INFO YO ANKO
+               }
+
+            fwrite(&lavalas,sizeof(struct parti),1,fichier);
+
+            fclose(fichier);
 
 }
+
+void list_PP(){
+      int i=1;
+       struct parti lavalas;
+      FILE* fichier= NULL;
+
+           fichier =fopen("part_pol.dat","r");
+               if(fichier==NULL){
+                    printf("le fichier ne veut pas s'ouvrir");
+                    exit(0);// LA NOU TA SIPOZE METE YON RETOUR NAN REEKRI INFO YO ANKO
+               }
+            rewind(fichier);
+
+            printf("\n \n \t \tliste des partis politiques");
+            while( fread(&lavalas,sizeof(struct parti),1,fichier)){
+                 printf("\n %d-------------------------------------------", i);
+                 i++;
+                 aff_parti(&lavalas);
+            }
+
+
+            fclose(fichier);
+}
+
+// ENSEMBLE DES FONCTIONS BASIQUES
 // CETTE FONCTION EST DEFINIE POUR POUVOIR DETERMINER SI UNE ANNEE EST BISEXTILE OU PAS
 int bisex(int A){
 
@@ -482,10 +590,9 @@ int bisex(int A){
     }
      else return 0;
 }
-void majuscule(char *chaine){
-int i=0;
-    while(chaine[i]!='\0'){
-        chaine[i]= toupper(chaine[i]);
-        i++;
-    }
+
+void color(int t, int f){
+    HANDLE H=GetStdHandle(STD_OUTPUT_HANDLE);
+        SetConsoleTextAttribute(H,f*16+t);
 }
+

@@ -2,22 +2,15 @@
 
 int main()
 {
-   struct parti lavj;
+   // struct parti* PP = (struct parti*)malloc(sizeof(struct parti));
 
-     pp_info(&lavj);
-     aff_parti(&lavj);
-     modiBefore(&lavj);
+    //(*PP).nom={"jjj"};
+   // (*PP).date_creat.annee=1233;
+   // printf("%d", (*PP).date_creat.annee);
 
-   /*FILE* fichier= NULL;
+    list_PP();
 
-   fichier =fopen("part_pol.dat","w");
-       if(fichier==NULL){
-            printf("fichier not open");
-            exit(0);
-       }
-        fwrite(&lavj,sizeof(struct parti),1,fichier);
-    fclose(fichier);
-   */
+
     return 0;
 }
 
