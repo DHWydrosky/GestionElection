@@ -411,6 +411,8 @@ void entrerNim(int *num){
          color(15,0);
 }
 void pp_info(struct parti *lavalas){
+    int id;
+
     printf("\n Vous allez entrer les differentes informations a propos de votre parti politique");
     printf("\n Vous allez les entrer dans l'ordre suivant");
     printf("\n 1-Nom du parti politique ");
@@ -427,7 +429,10 @@ void pp_info(struct parti *lavalas){
 
     clr();
     // GENERER UN ID POUR CHAQUE ENTREE RETENUE
-    lavalas->Id_PP=1;
+    id=rec_ID();
+    id++;
+    lavalas->Id_PP=id;
+    put_ID(id);
     // RECUPERATION DE LA DATE DU JOUR
     dateDuJour(&lavalas->date_ins);
     // DEMANDER A L'UTILISATEUR D'ENTRER LE NOM DU PARTI
@@ -526,7 +531,9 @@ int modiBefore(struct parti* lavalas){
         }
         clr();
         aff_parti(lavalas);
+        color(10,0);
         printf(" \n \t \t Voulez vous faire une autre modification \n si oui presser 1 \n sinon presser 0 :-> ");
+        color(15,0);
         ok=lireInt();
     }
 
@@ -571,7 +578,8 @@ void list_PP(){
             rewind(fichier);
 
             printf("\n \n \t \tliste des partis politiques");
-            while( fread(&lavalas,sizeof(struct parti),1,fichier)){
+            while( i< 4){
+                 fread(&lavalas,sizeof(struct parti),1,fichier);
                  printf("\n %d-------------------------------------------", i);
                  i++;
                  aff_parti(&lavalas);
@@ -596,3 +604,39 @@ void color(int t, int f){
         SetConsoleTextAttribute(H,f*16+t);
 }
 
+int rec_ID(){
+    int i=0;
+
+      FILE* fichier= NULL;
+
+           fichier =fopen("ID.dat","r");
+               if(fichier==NULL){
+                    printf("le fichier ne veut pas s'ouvrir");
+                    exit(0);// LA NOU TA SIPOZE METE YON RETOUR NAN REEKRI INFO YO ANKO
+               }
+            rewind(fichier);
+
+            fread(&i,sizeof(int),1,fichier);
+
+            fclose(fichier);
+
+            remove("ID.dat");
+
+            return i;
+}
+
+void put_ID(int i){
+
+       FILE* fichier= NULL;
+
+           fichier =fopen("ID.dat","w");
+               if(fichier==NULL){
+                    printf("le fichier ne veut pas s'ouvrir");
+                    exit(0);// LA NOU TA SIPOZE METE YON RETOUR NAN REEKRI INFO YO ANKO
+               }
+            rewind(fichier);
+
+            fwrite(&i,sizeof(int),1,fichier);
+
+            fclose(fichier);
+}

@@ -59,3 +59,5 @@ struct parti{
     void aff_parti();
     void color();
     void ins_PP();
+    int rec_ID();
+    void put_ID();
