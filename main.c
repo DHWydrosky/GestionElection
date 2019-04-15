@@ -7,8 +7,12 @@ int main()
     //(*PP).nom={"jjj"};
    // (*PP).date_creat.annee=1233;
    // printf("%d", (*PP).date_creat.annee);
-    //list_PP();
-   do{
+     list_PP(1);
+   //put_Nombre_Enr(7);
+
+  // modif_PP();
+
+ /*  do{
    //system("clear");
    ins_PP();
    color(10,0);

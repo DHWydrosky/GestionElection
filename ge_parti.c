@@ -43,10 +43,6 @@ int lire(char *chaine,int longeuer_chaine)
     char chaine2[30]= {'\0'};
     int i,j=0,temoin = 0;
 
-
-
-
-
     if(fgets(chaine,longeuer_chaine,stdin) != NULL)
     {
 
@@ -155,7 +151,8 @@ int lireInt()
         while(i<caracMini)
         {
             verificator = strchr(chaine2,chaine[i]) ;
-            if(verificator == NULL){
+            if(verificator == NULL)
+            {
                      color(12,0);
                 printf("\n \t VOTRE ENTREE N'A PAS ETE VALIDE ____ ENTRER ENCORE ");
                      color(10,0);
@@ -541,6 +538,7 @@ int modiBefore(struct parti* lavalas){
 
 //FONCTION ENREGISTRER PARTI
 void ins_PP(){
+         int reinitialisation_enreg=0;
          struct parti lavalas;
 
         pp_info(&lavalas);
@@ -561,13 +559,20 @@ void ins_PP(){
 
             fwrite(&lavalas,sizeof(struct parti),1,fichier);
 
+
             fclose(fichier);
+        reinitialisation_enreg = rec_Nombre_Enr();
+        reinitialisation_enreg++;
+        put_Nombre_Enr(reinitialisation_enreg);
 
 }
-
-void list_PP(){
+// CETTE FONCTION PERMET DE LISTER L'ENSEMBLE DES PARTIS ECRIT DANS LE FICHIER CORRESPONDANTS
+void list_PP(int mode){
       int i=1;
-       struct parti lavalas;
+      int nombre_ite;
+           nombre_ite=rec_Nombre_Enr();
+           put_Nombre_Enr(nombre_ite);
+     struct parti lavalas;
       FILE* fichier= NULL;
 
            fichier =fopen("part_pol.dat","r");
@@ -576,18 +581,93 @@ void list_PP(){
                     exit(0);// LA NOU TA SIPOZE METE YON RETOUR NAN REEKRI INFO YO ANKO
                }
             rewind(fichier);
-
+             printf("%d",nombre_ite);
             printf("\n \n \t \tliste des partis politiques");
-            while( i< 4){
+                 // fread(&lavalas,sizeof(struct parti),1,fichier);
+            while(!(i==nombre_ite+1)){
+
                  fread(&lavalas,sizeof(struct parti),1,fichier);
+                 color(10,0);
                  printf("\n %d-------------------------------------------", i);
+                 color(15,0);
                  i++;
+                 if(mode==0)
                  aff_parti(&lavalas);
+                 else{
+                     printf("\n1-Nom du parti      : %s \n", lavalas.nom);
+                     printf("\t  Inscrit le : %d/%d/%d \n", lavalas.date_ins.jour, lavalas.date_ins.mois, lavalas.date_ins.annee);
+                     printf("\t  ID         : %d \n", lavalas.Id_PP);
+                 }
             }
 
 
             fclose(fichier);
 }
+/*
+void modif_PP(){
+   int id,tem=0,nombre_ite=0 ,i=1;
+           nombre_ite=rec_Nombre_Enr();
+           put_Nombre_Enr(nombre_ite);
+   struct parti part_temp;
+
+   list_PP(1);// lister
+
+   color(10,0);
+   printf("entrer l'ID du parti que vous voulez modifier: ->");
+   color(15,0);
+   id = lireInt();
+
+
+      FILE* fichier= NULL;
+                //OUVERTURE DU FICHIER part_pol.dat
+           fichier =fopen("part_pol.dat","r");
+               if(fichier==NULL){
+                    printf("le fichier ne peut pas s'ouvrir");
+                    exit(0);// LA NOU TA SIPOZE METE YON RETOUR NAN REEKRI INFO YO ANKO
+               }
+            rewind(fichier);
+                 // VERIFIER SI id ENTRER PAR LA PERSONNE CORRESPOND A L'UN DE CEUX CONTENUES DANS LE FICHIER
+            while(!(i==nombre_ite)){
+                 fread(&part_temp,sizeof(struct parti),1,fichier);
+                 if(id == part_temp.Id_PP){
+                  tem=1; // OUI ON EN A TROUVE
+                  break;
+                 }
+                 i++;
+             }
+
+            if(tem==1){
+                printf("Il se trouve dans le fichier");
+                  // AFFICHAGE ET DEMANDE DE MODIFICATION
+                    aff_parti(&part_temp);
+                    modiBefore(&part_temp);
+
+              // OUVERTURE D'UN AUTRE FICHIER TAMPON EN MODE ECRITURE
+                         FILE* tampon=NULL;
+                        tampon= fopen("tampon.dat","w");
+                        if(tampon==NULL){
+                            printf("le fichier tampon ne peut pas s'ouvrir");
+                            exit(0);// LA NOU TA SIPOZE METE YON RETOUR NAN REEKRI INFO YO ANKO
+                         }
+                          rewind(tampon);
+
+                 rewind(fichier);
+                 while(!(i==nombre_ite)){
+                     fread(&part_temp,sizeof(struct parti),1,fichier);
+                     if(id==part_temp.Id_PP){
+                        fwrite(&part_temp,sizeof(struct parti),1,fichier);
+                      }
+                      i++;
+                 }
+            }
+            else
+                printf("not in");
+
+
+            fclose(fichier);
+}
+*/
+
 
 // ENSEMBLE DES FONCTIONS BASIQUES
 // CETTE FONCTION EST DEFINIE POUR POUVOIR DETERMINER SI UNE ANNEE EST BISEXTILE OU PAS
@@ -630,6 +710,44 @@ void put_ID(int i){
        FILE* fichier= NULL;
 
            fichier =fopen("ID.dat","w");
+               if(fichier==NULL){
+                    printf("le fichier ne veut pas s'ouvrir");
+                    exit(0);// LA NOU TA SIPOZE METE YON RETOUR NAN REEKRI INFO YO ANKO
+               }
+            rewind(fichier);
+
+            fwrite(&i,sizeof(int),1,fichier);
+
+            fclose(fichier);
+}
+
+
+int rec_Nombre_Enr(){
+    int i=0;
+
+      FILE* fichier= NULL;
+
+           fichier =fopen("EN.dat","r");
+               if(fichier==NULL){
+                    printf("le fichier ne veut pas s'ouvrir");
+                    exit(0);// LA NOU TA SIPOZE METE YON RETOUR NAN REEKRI INFO YO ANKO
+               }
+            rewind(fichier);
+
+            fread(&i,sizeof(int),1,fichier);
+
+            fclose(fichier);
+
+            remove("EN.dat");
+
+            return i;
+}
+
+void put_Nombre_Enr(int i){
+
+       FILE* fichier= NULL;
+
+           fichier =fopen("EN.dat","w");
                if(fichier==NULL){
                     printf("le fichier ne veut pas s'ouvrir");
                     exit(0);// LA NOU TA SIPOZE METE YON RETOUR NAN REEKRI INFO YO ANKO

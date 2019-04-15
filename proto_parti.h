@@ -61,3 +61,6 @@ struct parti{
     void ins_PP();
     int rec_ID();
     void put_ID();
+    int rec_Nombre_Enr();
+    void put_Nombre_Enr();
+    void modif_PP();
