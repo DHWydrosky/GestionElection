@@ -9,7 +9,7 @@
 // L'ENSEMBLE DES 'DEFINE'
 #define tailleMot 50
 #define caracMini 10
-#define clr(); printf("\n \t \t Patientez "); Sleep(1500); system("clear");
+#define clr(); Sleep(100); system("clear");
 
 
 
@@ -64,3 +64,4 @@ struct parti{
     int rec_Nombre_Enr();
     void put_Nombre_Enr();
     void modif_PP();
+    void menu_PP();

@@ -1,8 +1,8 @@
 # depslib dependency file v1.0
-1555362794 source:c:\users\personnel!!!\desktop\le_pendu\projet_struct\main.c
+1555506045 source:c:\users\personnel!!!\desktop\le_pendu\projet_struct\main.c
 	"proto_parti.h"
 
-1555354157 c:\users\personnel!!!\desktop\le_pendu\projet_struct\proto_parti.h
+1555506716 c:\users\personnel!!!\desktop\le_pendu\projet_struct\proto_parti.h
 	<stdio.h>
 	<stdlib.h>
 	<string.h>
@@ -11,6 +11,6 @@
 	<windows.h>
 	<ctype.h>
 
-1555362686 source:c:\users\personnel!!!\desktop\le_pendu\projet_struct\ge_parti.c
+1555513379 source:c:\users\personnel!!!\desktop\le_pendu\projet_struct\ge_parti.c
 	"proto_parti.h"
 

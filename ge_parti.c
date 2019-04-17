@@ -39,7 +39,7 @@ void viderBuffer()   // comme son nom l'indique
 int lire(char *chaine,int longeuer_chaine)
 {
 
-    char *position_cursor = NULL,*chaine_verificator = NULL;
+    char *position_cursor = NULL;
     char chaine2[30]= {'\0'};
     int i,j=0,temoin = 0;
 
@@ -118,24 +118,6 @@ for(i=0; i<longeuer_chaine; i++)
 }
 
 // CETTE FONCTION PERMET D'ENTRER DES VALEURS NUMERIQUES SOUS FORMES DE CARACTERES ET DE RETOUNER LA CONVERSION EN INT
-/*
-int lireInt(){ // bay yon ti modification sou fonction verifier si chak grenn karakte yo se chif
- char *pos=NULL;
- char chaine[caracMini];
- char entier[]= "01234567";
- int i;
-     if(fgets(chaine,caracMini,stdin)!=NULL)
-     {
-        pos= strchr(chaine,'\n');
-        if(pos!=NULL)
-        {
-            *pos='\0';
-        }
-        printf("%d",atoi(chaine));
-        return atoi(chaine);
-     }
-     else {return -1;}
-}*/
 
 int lireInt()
 {
@@ -326,12 +308,12 @@ void entrerEmail(char *email){
 
     char *voir = NULL;
 
-    voir = strpbrk(email, "!$&*-^\=`#%'+/?_{}"); // VOIR SI DANS L'EMAIL RECUPERE S'IL N'Y A PAS LES CARACTERES SUIVANTS "!$&*-^\=`#%'+/?_{}"
+    voir = strpbrk(email, "!$&*-^=`#%'+\?_{}"); // VOIR SI DANS L'EMAIL RECUPERE S'IL N'Y A PAS LES CARACTERES SUIVANTS "!$&*-^\=`#%'+/?_{}"
 
     if(voir!= NULL){
              color(12,0);
         printf("\n \t \t ERREUR: VOTRE EMAIL NE PEUT CONTENIR LES CARACTERES SUIVANTS");
-        printf("\n \t \t !$&*-^\=`#%'+/?_{}");
+        printf("\n \t \t !$&*-^=`#%'+\?_{}");
              color(10,0);
         printf("\n Entrer l'email encore une fois");
              color(15,0);
@@ -477,7 +459,7 @@ void aff_parti(struct parti* lavalas){
 }
 
 // CETTE FONCTION DEMANDE A LUTILISATEUR S'IL NE VEUT PAS MODIFIER LES DONNEES AVANT LENREFISTREMENT
-int modiBefore(struct parti* lavalas){
+void modiBefore(struct parti* lavalas){
     int ok;
     int choix;
     clr(); // nettoyer le console
@@ -556,14 +538,16 @@ void ins_PP(){
                     printf("fichier not open");
                     exit(0);// LA NOU TA SIPOZE METE YON RETOUR NAN REEKRI INFO YO ANKO
                }
-
+             if(fichier!=NULL){
             fwrite(&lavalas,sizeof(struct parti),1,fichier);
-
-
-            fclose(fichier);
-        reinitialisation_enreg = rec_Nombre_Enr();
+            printf("ok enr");
+             reinitialisation_enreg = rec_Nombre_Enr();
         reinitialisation_enreg++;
         put_Nombre_Enr(reinitialisation_enreg);
+             }
+
+            fclose(fichier);
+
 
 }
 // CETTE FONCTION PERMET DE LISTER L'ENSEMBLE DES PARTIS ECRIT DANS LE FICHIER CORRESPONDANTS
@@ -577,7 +561,7 @@ void list_PP(int mode){
 
            fichier =fopen("part_pol.dat","r");
                if(fichier==NULL){
-                    printf("le fichier ne veut pas s'ouvrir");
+                    printf("le fichier ne peut pas s'ouvrir");
                     exit(0);// LA NOU TA SIPOZE METE YON RETOUR NAN REEKRI INFO YO ANKO
                }
             rewind(fichier);
@@ -603,9 +587,9 @@ void list_PP(int mode){
 
             fclose(fichier);
 }
-/*
+// /*
 void modif_PP(){
-   int id,tem=0,nombre_ite=0 ,i=1;
+   int id,nombre_ite=0 ,i=1;
            nombre_ite=rec_Nombre_Enr();
            put_Nombre_Enr(nombre_ite);
    struct parti part_temp;
@@ -619,54 +603,39 @@ void modif_PP(){
 
 
       FILE* fichier= NULL;
+      FILE* tampon=NULL;
                 //OUVERTURE DU FICHIER part_pol.dat
            fichier =fopen("part_pol.dat","r");
                if(fichier==NULL){
-                    printf("le fichier ne peut pas s'ouvrir");
+                    printf("le fichier part_pol ne peut pas s'ouvrir");
                     exit(0);// LA NOU TA SIPOZE METE YON RETOUR NAN REEKRI INFO YO ANKO
                }
-            rewind(fichier);
-                 // VERIFIER SI id ENTRER PAR LA PERSONNE CORRESPOND A L'UN DE CEUX CONTENUES DANS LE FICHIER
-            while(!(i==nombre_ite)){
-                 fread(&part_temp,sizeof(struct parti),1,fichier);
-                 if(id == part_temp.Id_PP){
-                  tem=1; // OUI ON EN A TROUVE
-                  break;
-                 }
-                 i++;
-             }
-
-            if(tem==1){
-                printf("Il se trouve dans le fichier");
-                  // AFFICHAGE ET DEMANDE DE MODIFICATION
-                    aff_parti(&part_temp);
-                    modiBefore(&part_temp);
-
-              // OUVERTURE D'UN AUTRE FICHIER TAMPON EN MODE ECRITURE
-                         FILE* tampon=NULL;
-                        tampon= fopen("tampon.dat","w");
-                        if(tampon==NULL){
+            tampon= fopen("tampon.dat","w");
+                        if(tampon==NULL){//while
                             printf("le fichier tampon ne peut pas s'ouvrir");
                             exit(0);// LA NOU TA SIPOZE METE YON RETOUR NAN REEKRI INFO YO ANKO
                          }
-                          rewind(tampon);
-
-                 rewind(fichier);
-                 while(!(i==nombre_ite)){
-                     fread(&part_temp,sizeof(struct parti),1,fichier);
-                     if(id==part_temp.Id_PP){
-                        fwrite(&part_temp,sizeof(struct parti),1,fichier);
-                      }
-                      i++;
+            rewind(fichier);
+            rewind(tampon);
+                 // VERIFIER SI id ENTRER PAR LA PERSONNE CORRESPOND A L'UN DE CEUX CONTENUES DANS LE FICHIER
+            while(!(i==nombre_ite+1)){
+                 fread(&part_temp,sizeof(struct parti),1,fichier);
+                 if(id == part_temp.Id_PP){
+                         printf("trouver");
+                         aff_parti(&part_temp);
+                         modiBefore(&part_temp);
+                         fwrite(&part_temp,sizeof(struct parti),1,tampon);
+                 }else{
+                        fwrite(&part_temp,sizeof(struct parti),1,tampon);
                  }
-            }
-            else
-                printf("not in");
-
-
+                 i++;
+             }
+            fclose(tampon);
             fclose(fichier);
+
+            remove("part_pol.dat");
+            rename("tampon.dat","part_pol.dat");
 }
-*/
 
 
 // ENSEMBLE DES FONCTIONS BASIQUES
@@ -758,3 +727,35 @@ void put_Nombre_Enr(int i){
 
             fclose(fichier);
 }
+
+void menu_PP(){
+                int choix;
+
+                  printf("\n \t \t \t MENU ");
+                  printf("\n 1-Afficher l'ensemble des partis enregistrer");
+                  printf("\n 2-Inscrire un parti politique");
+                  printf("\n 3-Modifier un parti politique");
+                  printf("\n 4-Sortir");
+
+                  do{
+                    printf("\t \t \t --choix -> ");
+                     choix = lireInt();
+                  }while(choix<0 || choix>5);
+
+                 switch(choix)
+                {
+                case 1:
+                        list_PP(0);
+                    break;
+                case 2:
+                        ins_PP();
+                    break;
+                case 3:
+                       modif_PP();
+                 break;
+                 case 4:
+                        exit(0);
+                 break;
+                }
+            }
+
