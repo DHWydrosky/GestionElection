@@ -162,7 +162,7 @@ int lireInt()
 }
 // CETTE FONCTION NOUS PERMET DE RECUPERER LES ADRESSES
 void entrerAdresse(struct Adres *adresse){
-
+   int dep;
    printf("\nvous allez l'adresse a linstant  format #rue, Nom de rue , Departement\n");
 
    printf(" \t #rue: ");
@@ -172,11 +172,11 @@ void entrerAdresse(struct Adres *adresse){
    lire(adresse->nomRue, tailleMot);
 
    printf("\n \t enter le departement: ");
-  // do{
 
-   lire(adresse->departement,caracMini);
-  // }
-   //while((adresse->departement=="OUEST" || adresse->departement=="SUD" || adresse->departement=="GRAND'ANSE" || adresse->departement=="CENTRE" || adresse->departement=="NORD" || adresse->departement=="NORD-EST" || adresse->departement=="NORD-OUEST"));
+  // do{
+      // printf("\n \t");
+       lire(adresse->departement,caracMini);
+  // }while(!(adresse->departement=="OUEST" || adresse->departement=="SUD" || adresse->departement=="GRAND'ANSE" || adresse->departement=="CENTRE" || adresse->departement=="NORD" || adresse->departement=="NORD-EST" || adresse->departement=="NORD-OUEST"));
     printf("\nvous habitez a #%d,Rue %s, %s \n", adresse->rue, adresse->nomRue, adresse->departement);
 }
 
@@ -200,7 +200,7 @@ void entrerDate(struct dat *sdate, struct dat *actuel){
 
             printf("\n \t Mois: ");
             sdate->mois = lireInt();
-            if(sdate->mois>12){
+            if(sdate->mois>12 || sdate->mois<0){
             color(12,0);
             printf("\n \t ERREUR: IL Y A 12 MOIS DANS UNE ANNEE");
             color(10,0);
@@ -212,6 +212,7 @@ void entrerDate(struct dat *sdate, struct dat *actuel){
          sinonjour://ETIQUETTE
            printf(" \n\t Jour: ");
            sdate->jour = lireInt();
+
 
         if (sdate->jour<=0){
                 color(12,0);
@@ -520,7 +521,7 @@ void modiBefore(struct parti* lavalas){
 
 //FONCTION ENREGISTRER PARTI
 void ins_PP(){
-         int reinitialisation_enreg=0;
+         int reinitialisation_enreg=0,yes=0;
          struct parti lavalas;
 
         pp_info(&lavalas);
@@ -530,6 +531,16 @@ void ins_PP(){
         //ecriture en fichier
 
        // struct parti* PP = (struct parti*)malloc(sizeof(struct parti));
+
+       do{
+       color(10,0);
+       printf("Voulez vous faire cet enregistrement si OUI pressez 1 si NON pressez 0 -> ");
+       color(15,0);
+       yes= lireInt();
+       }while(yes!=1 && yes!=0);
+
+
+       if(yes==1){
 
        FILE* fichier= NULL;
 
@@ -542,13 +553,13 @@ void ins_PP(){
             fwrite(&lavalas,sizeof(struct parti),1,fichier);
             printf("ok enr");
              reinitialisation_enreg = rec_Nombre_Enr();
-        reinitialisation_enreg++;
-        put_Nombre_Enr(reinitialisation_enreg);
+             reinitialisation_enreg++;
+            put_Nombre_Enr(reinitialisation_enreg);
              }
 
             fclose(fichier);
 
-
+       }
 }
 // CETTE FONCTION PERMET DE LISTER L'ENSEMBLE DES PARTIS ECRIT DANS LE FICHIER CORRESPONDANTS
 void list_PP(int mode){
@@ -745,9 +756,10 @@ void menu_PP(){
                  switch(choix)
                 {
                 case 1:
-                        list_PP(0);
+                        list_PP(1);
                     break;
                 case 2:
+                        clr();
                         ins_PP();
                     break;
                 case 3:

@@ -31,6 +31,9 @@
 		<Compiler>
 			<Add option="-Wall" />
 		</Compiler>
+		<Unit filename="ge_candi.c">
+			<Option compilerVar="CC" />
+		</Unit>
 		<Unit filename="ge_parti.c">
 			<Option compilerVar="CC" />
 		</Unit>

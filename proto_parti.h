@@ -41,6 +41,21 @@ struct parti{
     int telephone;
     char email[tailleMot];
 };
+
+             // types candidats
+
+struct candidats {
+    int Id_candid;
+    char Nom[tailleMot];
+    char Prenom[tailleMot];
+    struct dat Dat_Nais;
+    struct Adres Adresse;
+    char Email[2*caracMini];
+    int tel;
+    int type;
+    struct dat Date_ins;
+};
+
 // L'ENSEMBLE DES VARIABLES GLOBALES
 
 
@@ -65,3 +80,7 @@ struct parti{
     void put_Nombre_Enr();
     void modif_PP();
     void menu_PP();
+
+    // ensemble des prototypes de fonctions ayant rapport avec les candidats
+
+    void cand_info(struct candidats* candidat);
