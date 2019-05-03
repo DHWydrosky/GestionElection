@@ -30,7 +30,10 @@ struct Responsables{
     char nom[2*caracMini];
     char prenom[2*caracMini];
 };
-
+struct id_can{
+ int dep;
+ int propre;
+};
 struct parti{
     int Id_PP;
     char nom[tailleMot];
@@ -45,7 +48,7 @@ struct parti{
              // types candidats
 
 struct candidats {
-    int Id_candid;
+    struct id_can Id_candid;
     char Nom[tailleMot];
     char Prenom[tailleMot];
     struct dat Dat_Nais;
@@ -76,11 +79,20 @@ struct candidats {
     void ins_PP();
     int rec_ID();
     void put_ID();
-    int rec_Nombre_Enr();
-    void put_Nombre_Enr();
+    int rec_candi_ID();
+    void put_candi_ID();
+    void nombre_enr();
     void modif_PP();
     void menu_PP();
 
     // ensemble des prototypes de fonctions ayant rapport avec les candidats
 
-    void cand_info(struct candidats* candidat);
+    void cand_info();
+    void modi_candi_Before();
+    void list_candid();
+    void menu_Candi();
+    void affi_candi();
+    void ins_cand();
+    void modif_cand();
+
+    void menu();

@@ -132,7 +132,7 @@ int lireInt()
     {
         while(i<caracMini)
         {
-            verificator = strchr(chaine2,chaine[i]) ;
+            verificator = strchr(chaine2,chaine[i]);
             if(verificator == NULL)
             {
                      color(12,0);
@@ -181,20 +181,36 @@ void entrerAdresse(struct Adres *adresse){
 }
 
 //FONTION NOUS PERMETTANT D'ENTRER LES DATES
-void entrerDate(struct dat *sdate, struct dat *actuel){
+void entrerDate(struct dat *sdate, struct dat *actuel,int age){
     printf("\nVous aller entrer la date dans le format AAAA/MM/JJ exemple 1996/08/10 \n");
 
         do{
             printf("\n \t Annee: ");
             sdate->annee = lireInt();
-            if(sdate->annee > actuel->annee){
+            if(sdate->annee > actuel->annee-age){
                 color(12,0);
-                printf("\n \t ERREUR: L'ANNEE DE CREATION NE PEUT ETRE SUPERIEUR A %d", actuel->annee);
+                if(age==0)
+                     printf("\n \t ERREUR: L'ANNEE DE CREATION NE PEUT ETRE SUPERIEUR A %d", actuel->annee-age);
+                else
+                    printf("\n \t ERREUR: VOUS N'ETES PAS MAJEUR");
+                color(10,0);
+
+                printf("\n \t \t Entrer l'annee encore une fois");
+                color(15,0);
+            }
+
+            if(sdate->annee <=1804){
+                color(12,0);
+                if(age==0)
+                    printf("\n \t ERREUR: L'ANNEE DE CREATION DOIT ETRE SUPERIEUR A 1804");
+                else
+                    printf("\n \t ERREUR: L'ANNEE DE NAISSANCE DOIT ETRE SUPERIEUR A 1804");
                 color(10,0);
                 printf("\n \t \t Entrer l'annee encore une fois");
                 color(15,0);
             }
-         }while(sdate->annee<=1804 || sdate->annee > actuel->annee);
+
+         }while(sdate->annee<=1804 || sdate->annee > actuel->annee-age);
 
         do{
 
@@ -267,7 +283,7 @@ void entrerDate(struct dat *sdate, struct dat *actuel){
              color(12,0);
         printf("ERREUR: LA DATE DE CREATION NE PEUT SE CONFONDRE AVEC LA DATE D'INSCRIPTION");
              color(15,0);
-             entrerDate(sdate,actuel);
+             entrerDate(sdate,actuel,0);
       }
 
             color(4,0);
@@ -423,7 +439,7 @@ void pp_info(struct parti *lavalas){
 
     // DEMANDER A L'UTILISATEUR D'ENTRER LA DATE DE CREATION DE CE PARTI
     printf("\n\t\t\t2-DATE DE CREATION--");
-    entrerDate(&lavalas->date_creat, &lavalas->date_ins);
+    entrerDate(&lavalas->date_creat, &lavalas->date_ins,0);
     clr();
     // ICI POUR ENTRER L'ADRESSE
     printf("\n\t\t\t3-ADRESSE DU PARTI POLITIQUE--");
@@ -488,7 +504,7 @@ void modiBefore(struct parti* lavalas){
         case 2:
                 printf("\nEntrer la nouvelle date de creation");
                 printf("\n Date creation ");
-                entrerDate(&lavalas->date_creat,&lavalas->date_ins);
+                entrerDate(&lavalas->date_creat,&lavalas->date_ins,0);
             break;
         case 3:
                 printf("\nEntrer la nouvelle adresse");
@@ -521,7 +537,7 @@ void modiBefore(struct parti* lavalas){
 
 //FONCTION ENREGISTRER PARTI
 void ins_PP(){
-         int reinitialisation_enreg=0,yes=0;
+         int yes=0;
          struct parti lavalas;
 
         pp_info(&lavalas);
@@ -552,21 +568,19 @@ void ins_PP(){
              if(fichier!=NULL){
             fwrite(&lavalas,sizeof(struct parti),1,fichier);
             printf("ok enr");
-             reinitialisation_enreg = rec_Nombre_Enr();
-             reinitialisation_enreg++;
-            put_Nombre_Enr(reinitialisation_enreg);
+
              }
 
             fclose(fichier);
 
        }
+
 }
 // CETTE FONCTION PERMET DE LISTER L'ENSEMBLE DES PARTIS ECRIT DANS LE FICHIER CORRESPONDANTS
 void list_PP(int mode){
       int i=1;
       int nombre_ite;
-           nombre_ite=rec_Nombre_Enr();
-           put_Nombre_Enr(nombre_ite);
+           nombre_enr(&nombre_ite);
      struct parti lavalas;
       FILE* fichier= NULL;
 
@@ -579,7 +593,12 @@ void list_PP(int mode){
              printf("%d",nombre_ite);
             printf("\n \n \t \tliste des partis politiques");
                  // fread(&lavalas,sizeof(struct parti),1,fichier);
-            while(!(i==nombre_ite+1)){
+
+
+         nombre_enr(&nombre_ite);
+
+                 rewind(fichier);
+            while(!(i==nombre_ite)){
 
                  fread(&lavalas,sizeof(struct parti),1,fichier);
                  color(10,0);
@@ -600,9 +619,8 @@ void list_PP(int mode){
 }
 // /*
 void modif_PP(){
-   int id,nombre_ite=0 ,i=1;
-           nombre_ite=rec_Nombre_Enr();
-           put_Nombre_Enr(nombre_ite);
+   int id,nombre_ite=0 ,i=1,tem=0;
+           nombre_enr(&nombre_ite);
    struct parti part_temp;
 
    list_PP(1);// lister
@@ -629,9 +647,10 @@ void modif_PP(){
             rewind(fichier);
             rewind(tampon);
                  // VERIFIER SI id ENTRER PAR LA PERSONNE CORRESPOND A L'UN DE CEUX CONTENUES DANS LE FICHIER
-            while(!(i==nombre_ite+1)){
+            while(!(i==nombre_ite)){
                  fread(&part_temp,sizeof(struct parti),1,fichier);
                  if(id == part_temp.Id_PP){
+                         tem=1;
                          printf("trouver");
                          aff_parti(&part_temp);
                          modiBefore(&part_temp);
@@ -646,6 +665,15 @@ void modif_PP(){
 
             remove("part_pol.dat");
             rename("tampon.dat","part_pol.dat");
+
+            if(tem==0)
+            {
+                clr();
+                color(12,0);
+               printf("\nL'IDENTIFIANT QUE VOUS ESSAYEZ D'ENTRER N'EXISTE PAS");
+                color(15,0);
+               modif_PP();
+            }
 }
 
 
@@ -671,7 +699,7 @@ int rec_ID(){
 
            fichier =fopen("ID.dat","r");
                if(fichier==NULL){
-                    printf("le fichier ne veut pas s'ouvrir");
+                    printf("le fichier ne peut pas s'ouvrir");
                     exit(0);// LA NOU TA SIPOZE METE YON RETOUR NAN REEKRI INFO YO ANKO
                }
             rewind(fichier);
@@ -685,31 +713,14 @@ int rec_ID(){
             return i;
 }
 
-void put_ID(int i){
-
-       FILE* fichier= NULL;
-
-           fichier =fopen("ID.dat","w");
-               if(fichier==NULL){
-                    printf("le fichier ne veut pas s'ouvrir");
-                    exit(0);// LA NOU TA SIPOZE METE YON RETOUR NAN REEKRI INFO YO ANKO
-               }
-            rewind(fichier);
-
-            fwrite(&i,sizeof(int),1,fichier);
-
-            fclose(fichier);
-}
-
-
-int rec_Nombre_Enr(){
+int rec_candi_ID(){
     int i=0;
 
       FILE* fichier= NULL;
 
-           fichier =fopen("EN.dat","r");
+           fichier =fopen("IDCAN.dat","r");
                if(fichier==NULL){
-                    printf("le fichier ne veut pas s'ouvrir");
+                    printf("le fichier ne peut pas s'ouvrir");
                     exit(0);// LA NOU TA SIPOZE METE YON RETOUR NAN REEKRI INFO YO ANKO
                }
             rewind(fichier);
@@ -718,18 +729,18 @@ int rec_Nombre_Enr(){
 
             fclose(fichier);
 
-            remove("EN.dat");
+            remove("IDCAN.dat");
 
             return i;
 }
 
-void put_Nombre_Enr(int i){
+void put_ID(int i){
 
        FILE* fichier= NULL;
 
-           fichier =fopen("EN.dat","w");
+           fichier =fopen("ID.dat","w");
                if(fichier==NULL){
-                    printf("le fichier ne veut pas s'ouvrir");
+                    printf("le fichier ne peut pas s'ouvrir");
                     exit(0);// LA NOU TA SIPOZE METE YON RETOUR NAN REEKRI INFO YO ANKO
                }
             rewind(fichier);
@@ -739,6 +750,45 @@ void put_Nombre_Enr(int i){
             fclose(fichier);
 }
 
+void put_candi_ID(int i){
+
+       FILE* fichier= NULL;
+
+           fichier =fopen("IDCAN.dat","w");
+               if(fichier==NULL){
+                    printf("le fichier ne peut pas s'ouvrir");
+                    exit(0);// LA NOU TA SIPOZE METE YON RETOUR NAN REEKRI INFO YO ANKO
+               }
+            rewind(fichier);
+
+            fwrite(&i,sizeof(int),1,fichier);
+
+            fclose(fichier);
+}
+void nombre_enr(int* i){
+    (*i)=0;
+  struct parti lavalas;
+   FILE* fichier= NULL;
+
+           fichier =fopen("part_pol.dat","r");
+
+            rewind(fichier);
+
+               if(fichier==NULL){
+                    printf("le fichier ne peut pas s'ouvrir");
+                    exit(0);// LA NOU TA SIPOZE METE YON RETOUR NAN REEKRI INFO YO ANKO
+               }
+
+                while(!feof(fichier)){
+                        fread(&lavalas,sizeof(struct parti),1,fichier);
+                        (*i)++;
+                }
+
+      fclose(fichier);
+
+}
+
+
 void menu_PP(){
                 int choix;
 
@@ -746,28 +796,57 @@ void menu_PP(){
                   printf("\n 1-Afficher l'ensemble des partis enregistrer");
                   printf("\n 2-Inscrire un parti politique");
                   printf("\n 3-Modifier un parti politique");
-                  printf("\n 4-Sortir");
+                  printf("\n 4-Arriere");
 
-                  do{
-                    printf("\t \t \t --choix -> ");
-                     choix = lireInt();
-                  }while(choix<0 || choix>5);
+                  //do{
+                         printf("\t \t \t --choix -> ");
+                         choix = lireInt();
+                  //}while(choix<0 || choix>5);
 
                  switch(choix)
                 {
-                case 1:
-                        list_PP(1);
-                    break;
-                case 2:
-                        clr();
-                        ins_PP();
-                    break;
-                case 3:
-                       modif_PP();
-                 break;
-                 case 4:
-                        exit(0);
-                 break;
+                    case 1:
+                            list_PP(1);
+                            menu_PP();
+                         break;
+                    case 2:
+                            clr();
+                            ins_PP();
+                            menu_PP();
+                        break;
+                    case 3:
+                           modif_PP();
+                           menu_PP();
+                        break;
+                    case 4:
+                            menu();
+                        break;
                 }
-            }
+}
 
+void menu(){
+        int choix;
+
+                  printf("\n \t \t \t MENU ");
+                  printf("\n 1-Fontionnalites relatives aux partis politiques");
+                  printf("\n 2-Fontionnalites relatives aux candidats");
+                  printf("\n 3-Sortir");
+
+                  //do{
+                         printf("\n\t \t \t --choix -> ");
+                         choix = lireInt();
+                  //}while(choix<0 || choix>5);
+
+                 switch(choix)
+                {
+                    case 1:
+                            menu_PP();
+                         break;
+                    case 2:
+                            menu_Candi();
+                        break;
+                    case 3:
+                            exit(0);
+                        break;
+                }
+}
