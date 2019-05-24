@@ -130,6 +130,7 @@ int lireInt()
 
     if(lire(chaine,caracMini))
     {
+
         while(i<caracMini)
         {
             verificator = strchr(chaine2,chaine[i]);
@@ -161,13 +162,13 @@ int lireInt()
 
 }
 // CETTE FONCTION NOUS PERMET DE RECUPERER LES ADRESSES
-void entrerAdresse(struct Adres *adresse){
-   int dep;
+int entrerAdresse(struct Adres *adresse){
+   int depart;
    printf("\nvous allez l'adresse a linstant  format #rue, Nom de rue , Departement\n");
 
    printf(" \t #rue: ");
    adresse->rue=lireInt();//fok ou met yon ti verifikasyon la
-
+   printf("lalalalala");
    printf("\n \t nom de rue: ");
    lire(adresse->nomRue, tailleMot);
 
@@ -175,9 +176,59 @@ void entrerAdresse(struct Adres *adresse){
 
   // do{
       // printf("\n \t");
-       lire(adresse->departement,caracMini);
+       printf("\n \tchoisir un departement");
+       printf("\n1-OUEST \n2-NORD \n3-NORD-EST \n4-NORD-OUEST \n5-SUD \n6-SUD-EST \n7-ARTIBONITE \n8-CENTRE \n9-NIPPES \n10-GRAND'ANSE \n \t ->");
+
+     do{
+      depart = lireInt();
+
+      if(depart<=0 || depart>10){
+        color(12,0);
+        printf("\n \tERREUR: VOUS DEVEZ CHOISIR UN CHIFFRE ENTRE 1 ET 10");
+        color(10,0);
+        printf("\n \tEntrer encore une fois->");
+        color(15,0);
+      }
+
+    }while(depart<=0 || depart>10);
+
+     switch(depart){
+                   case 1:
+                        strcpy(adresse->departement,"OUEST");
+                        break;
+                    case 2:
+                          strcpy(adresse->departement,"NORD");
+                        break;
+                    case 3:
+                        strcpy(adresse->departement,"NORD-EST");
+                        break;
+                    case 4:
+                       strcpy(adresse->departement,"NORD-OUEST");
+                        break;
+                    case 5:
+                       strcpy(adresse->departement,"SUD");
+                        break;
+                    case 6:
+                         strcpy(adresse->departement,"SUD-EST");
+                        break;
+                    case 7:
+                       strcpy(adresse->departement,"ARTIBONITE");
+                        break;
+                    case 8:
+                        strcpy(adresse->departement,"CENTRE");
+                        break;
+                    case 9:
+                        strcpy(adresse->departement,"NIPPES");
+                        break;
+                    case 10:
+                        strcpy(adresse->departement,"GRAND'ANSE");
+                        break;
+                 }
+
+
   // }while(!(adresse->departement=="OUEST" || adresse->departement=="SUD" || adresse->departement=="GRAND'ANSE" || adresse->departement=="CENTRE" || adresse->departement=="NORD" || adresse->departement=="NORD-EST" || adresse->departement=="NORD-OUEST"));
     printf("\nvous habitez a #%d,Rue %s, %s \n", adresse->rue, adresse->nomRue, adresse->departement);
+    return depart;
 }
 
 //FONTION NOUS PERMETTANT D'ENTRER LES DATES
@@ -350,7 +401,7 @@ void entrerEmail(char *email){
 
       // VERIFIER SI IL Y A PLUS DE 6 CARACTERE AVANT L'EXTENSION
      i=0;
-     while(email[i]!='@' && i<49){
+     while(email[i]!='@' && i<tailleMot-1){
         i++;
      }
      if(i<6){
@@ -754,7 +805,7 @@ void put_candi_ID(int i){
 
        FILE* fichier= NULL;
 
-           fichier =fopen("IDCAN.dat","w");
+           fichier =fopen("IDBV.dat","w");
                if(fichier==NULL){
                     printf("le fichier ne peut pas s'ouvrir");
                     exit(0);// LA NOU TA SIPOZE METE YON RETOUR NAN REEKRI INFO YO ANKO
@@ -806,7 +857,7 @@ void menu_PP(){
                  switch(choix)
                 {
                     case 1:
-                            list_PP(1);
+                            list_PP(0);
                             menu_PP();
                          break;
                     case 2:
@@ -830,7 +881,10 @@ void menu(){
                   printf("\n \t \t \t MENU ");
                   printf("\n 1-Fontionnalites relatives aux partis politiques");
                   printf("\n 2-Fontionnalites relatives aux candidats");
-                  printf("\n 3-Sortir");
+                  printf("\n 3-Fonctionnalites relatives aux bureaux de votes");
+                  printf("\n 4-Fonctionnalites relatives aux electeurs");
+                  printf("\n 5-voter");
+                  printf("\n 6-Sortir");
 
                   //do{
                          printf("\n\t \t \t --choix -> ");
@@ -846,7 +900,18 @@ void menu(){
                             menu_Candi();
                         break;
                     case 3:
+                            menu_BV();
+                        break;
+                    case 4:
+                            menu_elect();
+                        break;
+                    case 5:
+                            menu_vote;
+                        break;
+                    case 6:
                             exit(0);
                         break;
+                    default:
+                        menu();
                 }
 }

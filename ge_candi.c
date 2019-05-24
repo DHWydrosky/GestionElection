@@ -2,7 +2,7 @@
 
 void cand_info(struct candidats* candidat){
 
-    int id,tem=0,type,prop;
+    int id,tem=0,type,prop,depart;
     struct parti part_temp;
 
     prop=rec_candi_ID();
@@ -56,7 +56,23 @@ void cand_info(struct candidats* candidat){
     printf("\n \t Entrer le telephone du candidat en question: ");
     entrerNim(&candidat->tel);
     clr();
+     color(10,0);
+    printf("\n \tchoisir un departement");
+    printf("\n1-OUEST \n2-NORD \n3-NORD-EST \n4-NORD-OUEST \n5-SUD \n6-SUD-EST \n7-ARTIBONITE \n8-CENTRE \n9-NIPPES \n10-GRAND'ANSE \n \t ->");
+    color(15,0);
+    do{
+      depart = lireInt();
 
+      if(depart<=0 || depart>10){
+        color(12,0);
+        printf("\n \tERREUR: VOUS DEVEZ CHOISIR UN CHIFFRE ENTRE 1 ET 10");
+        color(10,0);
+        printf("\n \tEntrer encore une fois->");
+        color(15,0);
+      }
+
+    }while(depart<=0 || depart>10);
+    candidat->Id_candid.departement=depart;
 
 
 
@@ -113,10 +129,10 @@ void cand_info(struct candidats* candidat){
 
         }while(tem!=1);
           candidat->type=id;
-          candidat->Id_candid.dep=id;
+          candidat->Id_candid.dependance=id;
     }
     else{
-         candidat->Id_candid.dep=0;
+         candidat->Id_candid.dependance=0;
          candidat->type=0;
     }
      candidat->Id_candid.propre=prop;
@@ -136,7 +152,7 @@ void affi_candi(struct candidats* candi){
 
 
     printf("\n \t \t \t \t Inscrit le : %d/%d/%d \n", candi->Date_ins.jour, candi->Date_ins.mois, candi->Date_ins.annee);
-    printf("\t \t \t \t ID         : %03d-%03d \n", candi->Id_candid.dep, candi->Id_candid.propre);
+    printf("\t \t \t \t ID         : %03d-%03d-%03d \n", candi->Id_candid.dependance, candi->Id_candid.departement, candi->Id_candid.propre);
 
 }
 
@@ -285,7 +301,90 @@ void list_candid(int mode){
                  else{
                      printf("\n1-Nom du candidat      : %s %s\n", candidat.Nom, candidat.Prenom);
                      printf("\t  Inscrit le : %d/%d/%d \n", candidat.Date_ins.jour, candidat.Date_ins.mois, candidat.Date_ins.annee);
-                     printf("\t  ID         : %03d-%03d \n", candidat.Id_candid.dep, candidat.Id_candid.propre);
+                     printf("\t  ID         : %03d-%03d-%03d \n", candidat.Id_candid.dependance,candidat.Id_candid.departement, candidat.Id_candid.propre);
+                 }
+            }
+
+            fclose(fichier);
+
+}
+
+void list_candid_depar(int mode,int depart){
+      int i=1;
+      int nombre_ite=0;
+
+
+
+     struct candidats candidat;
+      FILE* fichier= NULL;
+
+           fichier =fopen("candid.dat","r");
+               if(fichier==NULL){
+                    printf("le fichier ne peut pas s'ouvrir");
+                    exit(0);// LA NOU TA SIPOZE METE YON RETOUR NAN REEKRI INFO YO ANKO
+               }
+            //rewind(fichier);
+            while(!feof(fichier)){
+              fread(&candidat,sizeof(struct candidats),1,fichier);
+              nombre_ite++;
+            }
+             printf("%d",nombre_ite);
+             printf("\n \n \t \tliste des candidats ");
+                 // fread(&candidat,sizeof(struct parti),1,fichier);
+
+                 switch(depart){
+                   case 1:
+                        printf("de l'OUEST");
+                        break;
+                    case 2:
+                        printf("du NORD");
+                        break;
+                    case 3:
+                        printf("pour le NORD-EST");
+                        break;
+                    case 4:
+                        printf("pour le NORD-OUEST");
+                        break;
+                    case 5:
+                        printf("du SUD");
+                        break;
+                    case 6:
+                        printf("de SUD-EST");
+                        break;
+                    case 7:
+                        printf("de l'ARTIBONITE");
+                        break;
+                    case 8:
+                        printf("du CENTRE");
+                        break;
+                    case 9:
+                        printf("pour NIPPES");
+                        break;
+                    case 10:
+                        printf("pour GRAND'ANSE");
+                        break;
+                 }
+
+
+
+            rewind(fichier);
+            while(!(i==nombre_ite)){
+
+                 fread(&candidat,sizeof(struct candidats),1,fichier);
+                 i++;
+
+                 if(candidat.Id_candid.departement==depart){
+                     color(10,0);
+                     printf("\n -------------------------------------------");
+                     color(15,0);
+
+                     if(mode==0)
+                     affi_candi(&candidat);
+                     else{
+                         printf("\n1-Nom du candidat      : %s %s\n", candidat.Nom, candidat.Prenom);
+                         printf("\t  Inscrit le : %d/%d/%d \n", candidat.Date_ins.jour, candidat.Date_ins.mois, candidat.Date_ins.annee);
+                         printf("\t  ID         : %03d-%03d-%03d \n", candidat.Id_candid.dependance,candidat.Id_candid.departement, candidat.Id_candid.propre);
+                     }
                  }
             }
 
@@ -372,7 +471,7 @@ void menu_Candi(){
                  switch(choix)
                 {
                     case 1:
-                            list_candid(1);
+                            list_candid(0);
                             menu_Candi();
                          break;
                     case 2:
