@@ -318,17 +318,7 @@ void modif_elect(){
    struct elect electeur;
 
 
-   list_electeur(1);// lister
-   list_electeur(2);
-   list_electeur(3);
-   list_electeur(4);
-   list_electeur(5);
-   list_electeur(6);
-   list_electeur(7);
-   list_electeur(8);
-   list_electeur(9);
-   list_electeur(10);
-
+   list_electeur();// lister
 
    color(10,0);
    printf("entrer le cin de l'electeur que vous voulez modifier: ->");

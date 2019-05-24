@@ -906,7 +906,7 @@ void menu(){
                             menu_elect();
                         break;
                     case 5:
-                            menu_vote;
+                            menu_vote();
                         break;
                     case 6:
                             exit(0);
